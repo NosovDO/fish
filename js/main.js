@@ -54,8 +54,12 @@ function getRandom(min, max) {
 }
 
 document.querySelector('.game-zone').addEventListener('click', function(e) {
-    this.removeChild(e.target);
-    arrFish.forEach((_, index) => arrFish.splice(arrFish.indexOf(e.target), 1));
+    const element = e.target
+    if (element.classList.contains('fish')) {
+        const indexFish = arrFish.indexOf(element);
+        this.removeChild(element);
+        arrFish.splice(indexFish, 1);
+    }
 });
 
 addFish();
