@@ -3,9 +3,10 @@
 const WIDTH_SCREEN = window.innerWidth;
 const HEIGHT_SCREEN = window.innerHeight;
 
+const GAME_ZONE = document.querySelector('.game-zone');
 let addLastFish = Date.now();
 let speed = Date.now();
-let arrFish = [];
+const fishs = new Set()
 
 const getRandomPoint = () => ({
     x: getRandom(0, WIDTH_SCREEN),
@@ -20,9 +21,10 @@ function addFish() {
         fish.className = 'fish';
         fish.style.top = `${point.x}px`;
         fish.style.left = `${point.y}px`;
-        arrFish.push(fish);
-        arrFish.forEach(item => document.querySelector('.game-zone').appendChild(item));
         addLastFish = Date.now();
+
+        fishs.add(fish)
+        GAME_ZONE.appendChild(fish)
     }
 
     movingFish();
@@ -30,7 +32,7 @@ function addFish() {
 }
 
 function movingFish() {
-    arrFish.forEach(item => {
+    fishs.forEach(item => {
         let fishTop = item.dataset.yRandom;
         let fishLeft = item.dataset.xRandom;
         let Xpos = item.offsetLeft;
@@ -65,9 +67,8 @@ function getRandom(min, max) {
 document.querySelector('.game-zone').addEventListener('click', function(e) {
     const element = e.target
     if (element.classList.contains('fish')) {
-        const indexFish = arrFish.indexOf(element);
+        fishs.delete(element)
         this.removeChild(element);
-        arrFish.splice(indexFish, 1);
     }
 });
 
