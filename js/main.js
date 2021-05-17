@@ -1,18 +1,25 @@
 "use strict";
 
+const WIDTH_SCREEN = window.innerWidth;
+const HEIGHT_SCREEN = window.innerHeight;
+
 let addLastFish = Date.now();
 let speed = Date.now();
 let arrFish = [];
+
+const getRandomPoint = () => ({
+    x: getRandom(0, WIDTH_SCREEN),
+    y: getRandom(0, HEIGHT_SCREEN)
+})
 
 function addFish() {
     const fish = document.createElement('div');
 	if (Date.now() - addLastFish > 3000)
 	{
+        const point = getRandomPoint();
         fish.className = 'fish';
-        fish.dataset.xRandom = getRandom(0, 1720);
-        fish.dataset.yRandom = getRandom(0, 800);
-        fish.style.top = getRandom(0, 800) + 'px';
-        fish.style.left = getRandom(0, 1720) + 'px';
+        fish.style.top = `${point.x}px`;
+        fish.style.left = `${point.y}px`;
         arrFish.push(fish);
         arrFish.forEach(item => document.querySelector('.game-zone').appendChild(item));
         addLastFish = Date.now();
@@ -29,6 +36,8 @@ function movingFish() {
         let Xpos = item.offsetLeft;
         let Ypos = item.offsetTop;
 
+        const point = getRandomPoint()
+
         if(Xpos < fishLeft) {
             item.style.transform = 'scale(-1, 1)';
             item.style.left = 1 + Xpos + 'px';
@@ -36,7 +45,7 @@ function movingFish() {
             item.style.transform = 'scale(1, 1)';
             item.style.left = -1 + Xpos + 'px';
         } else {
-            item.dataset.xRandom = getRandom(0, 1720);
+            item.dataset.xRandom = point.x;
         }
 
         if(Ypos < fishTop) {
@@ -44,7 +53,7 @@ function movingFish() {
         } else if(Ypos > fishTop) {
             item.style.top = -1 + Ypos + 'px';
         } else {
-            item.dataset.yRandom = getRandom(0, 800);
+            item.dataset.yRandom = point.y;
         }
     });
 }
