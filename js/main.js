@@ -1,30 +1,21 @@
 "use strict";
 
-const WIDTH_SCREEN = window.innerWidth;
-const HEIGHT_SCREEN = window.innerHeight;
-
-const GAME_ZONE = document.querySelector('.game-zone');
 let addLastFish = Date.now();
 let speed = Date.now();
-const fishs = new Set()
-
-const getRandomPoint = () => ({
-    x: getRandom(0, WIDTH_SCREEN),
-    y: getRandom(0, HEIGHT_SCREEN)
-})
+let arrFish = [];
 
 function addFish() {
     const fish = document.createElement('div');
 	if (Date.now() - addLastFish > 3000)
 	{
-        const point = getRandomPoint();
         fish.className = 'fish';
-        fish.style.top = `${point.x}px`;
-        fish.style.left = `${point.y}px`;
+        fish.dataset.xRandom = getRandom(0, 1720);
+        fish.dataset.yRandom = getRandom(0, 800);
+        fish.style.top = getRandom(0, 800) + 'px';
+        fish.style.left = getRandom(0, 1720) + 'px';
+        arrFish.push(fish);
+        arrFish.forEach(item => document.querySelector('.game-zone').appendChild(item));
         addLastFish = Date.now();
-
-        fishs.add(fish)
-        GAME_ZONE.appendChild(fish)
     }
 
     movingFish();
@@ -32,13 +23,11 @@ function addFish() {
 }
 
 function movingFish() {
-    fishs.forEach(item => {
+    arrFish.forEach(item => {
         let fishTop = item.dataset.yRandom;
         let fishLeft = item.dataset.xRandom;
         let Xpos = item.offsetLeft;
         let Ypos = item.offsetTop;
-
-        const point = getRandomPoint()
 
         if(Xpos < fishLeft) {
             item.style.transform = 'scale(-1, 1)';
@@ -47,7 +36,7 @@ function movingFish() {
             item.style.transform = 'scale(1, 1)';
             item.style.left = -1 + Xpos + 'px';
         } else {
-            item.dataset.xRandom = point.x;
+            item.dataset.xRandom = getRandom(0, 1720);
         }
 
         if(Ypos < fishTop) {
@@ -55,7 +44,7 @@ function movingFish() {
         } else if(Ypos > fishTop) {
             item.style.top = -1 + Ypos + 'px';
         } else {
-            item.dataset.yRandom = point.y;
+            item.dataset.yRandom = getRandom(0, 800);
         }
     });
 }
@@ -67,8 +56,9 @@ function getRandom(min, max) {
 document.querySelector('.game-zone').addEventListener('click', function(e) {
     const element = e.target
     if (element.classList.contains('fish')) {
-        fishs.delete(element)
+        const indexFish = arrFish.indexOf(element);
         this.removeChild(element);
+        arrFish.splice(indexFish, 1);
     }
 });
 
