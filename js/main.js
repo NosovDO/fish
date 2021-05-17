@@ -73,4 +73,3 @@ document.querySelector('.game-zone').addEventListener('click', function(e) {
 });
 
 addFish();
-console.log('hello world');
